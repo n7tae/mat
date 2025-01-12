@@ -1,3 +1,13 @@
+// ################################################################
+// #                                                              #
+// #                     M17 Audio Tools                          #
+// #                                                              #
+// #         Copyright (c) 2024 by Thomas A. Early N7TAE          #
+// #                                                              #
+// # See the LICENSE file for details about the software license. #
+// #                                                              #
+// ################################################################
+
 #include <iostream>
 #include <fstream>
 #include <string>
