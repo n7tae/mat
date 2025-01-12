@@ -10,46 +10,21 @@
 ################################################################
 
 truncfile () {
-	first=$(awk 'NR==2{print $2}' ${1}.index)
-	lc=$( wc -l < ${1}.index )
-	last=$(awk -v ln=$lc 'NR==ln{print $3}' ${1}.index)
+	first=$(awk 'NR==2{print $2}' "${1}.index")
+	lc=$( wc -l < "${1}.index" )
+	last=$(awk -v ln=$lc 'NR==ln{print $3}' "${1}.index")
 	count=$(( last - first + 1 ))
-	dd bs=8 skip=$first count=$count if=${1}.dat of=${1}.tmp
+	dd bs=8 skip=$first count=$count if="${1}.dat" of="${1}.tmp"
 }
 
-/bin/rm *.{wav,raw,dat,list,index}
-
-voice='english-us'
-wpm=140
-
-espeak -w speak.wav -v $voice "space, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, zee, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, dash, slash, dot, alpha, bravo, Charlie, delta, echo, foxtrot, golf, hotel, India, juliette, kilo, Lima, Mike, november, Oscar, papa, Quebec, romeo, Sierra, tango, uniform, Victor, whiskey, X-ray, yankee, zulu, M 17"
-
-espeak -w is_already_unlinked.wav   -v $voice -s $wpm "Is already unlinked."
-
-espeak -w is_already_linked.wav     -v $voice -s $wpm "Is already linked."
-
-espeak -w is_already_linking.wav    -v $voice -s $wpm "Is already linking."
-
-espeak -w was_disconnected_from.wav -v $voice -s $wpm "Was disconnected from"
-
-espeak -w is_linked_to.wav          -v $voice -s $wpm "Is linked to"
-
-espeak -w link_refused.wav          -v $voice -s $wpm "The link request was refused."
-
-espeak -w is_unlinked.wav           -v $voice -s $wpm "Is not linked."
-
-espeak -w is_linking.wav            -v $voice -s $wpm "Is linking."
-
-espeak -w welcome.wav               -v $voice -s $wpm "You're listening to"
-
-for f in speak is_already_unlinked is_already_linked is_already_linking was_disconnected_from is_linked_to link_refused is_unlinked is_linking welcome
+for f in *.wav
 do
 	echo "Processing $f ..."
-	sox ${f}.wav -b 16 -c 1 -r 8000 ${f}.raw
-	./index -l -t 20 ${f}.raw
-	./c2enc 3200 ${f}.raw ${f}.dat
-	truncfile $f
-	mv ${f}.{tmp,dat}
+	sox "$f" -b 16 -c 1 -r 8000 "${f%.wav}.raw"
+	tools/index -l -t 20 "${f%.wav}.raw"
+	tools/c2enc 3200 "${f%.wav}.raw" "${f%.wav}.dat"
+	truncfile "${f%.wav}"
+	/bin/mv "${f%.wav}.tmp" "${f%.wav}.dat"
 done
 
-ls -l *.{wav,raw,dat,list,index}
+/bin/ls -l *.{wav,raw,dat,list,index}

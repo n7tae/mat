@@ -31,3 +31,5 @@ espeak -w is_unlinked.wav           -v $voice -s $wpm "Is not linked."
 espeak -w is_linking.wav            -v $voice -s $wpm "Is linking."
 
 espeak -w welcome.wav               -v $voice -s $wpm "You're listening to"
+
+/bin/ls -l *.wav
