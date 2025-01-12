@@ -21,8 +21,8 @@ for f in *.wav
 do
 	echo "Processing $f ..."
 	sox "$f" -b 16 -c 1 -r 8000 "${f%.wav}.raw"
-	tools/index -l -t 20 "${f%.wav}.raw"
-	tools/c2enc 3200 "${f%.wav}.raw" "${f%.wav}.dat"
+	../tools/index -l -t ${1:-20} "${f%.wav}.raw"
+	../tools/c2enc 3200 "${f%.wav}.raw" "${f%.wav}.dat"
 	truncfile "${f%.wav}"
 	/bin/mv "${f%.wav}.tmp" "${f%.wav}.dat"
 done
