@@ -107,10 +107,8 @@ int main(int argc, char *argv[])
 	std::vector<unsigned> v; // the array of frame max values
 	int16_t aframe[160];     // a 20 ms audio frame (8000 Hz)
 	unsigned c = 0;
-	do
+	while (rfile.read(reinterpret_cast<char *>(aframe), 320))
 	{
-		memset(aframe, 0, 320);
-		rfile.read(reinterpret_cast<char *>(aframe), 320);
 		unsigned max = 0;
 		for (unsigned i=0; i<160; i++)
 		{
@@ -120,9 +118,9 @@ int main(int argc, char *argv[])
 		}
 		v.push_back(max);
 		if (lfile.is_open())
-			lfile << std::setw(6) << std::left << c << max << std::endl;
-		c++;
-	} while (not rfile.eof());
+			lfile << std::setw(6) << std::left << c++ << max << std::endl;
+		memset(aframe, 0, 320);
+	}
 	rfile.close();
 
 	if (lfile.is_open())
